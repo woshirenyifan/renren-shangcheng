@@ -35,14 +35,14 @@
 	
 	 -->
 	<aop:aspectj-autoproxy/>
- 	<aop:config>
+ 	<!-- <aop:config>
        <aop:aspect id="myAspect" ref="controllerAop">
           <aop:pointcut  id="myPointCut"  expression="execution(* com.ryf.controller.*.*(..))" />
-          <!-- <aop:before pointcut-ref="myPointCut" method="before" /> -->
+          <aop:before pointcut-ref="myPointCut" method="before" />
           <aop:after-returning pointcut-ref="myPointCut"  method="afterReturning"/>
-          <!-- <aop:around pointcut-ref="myPointCut" method="around" /> -->
+          <aop:around pointcut-ref="myPointCut" method="around" />
        </aop:aspect>
-    </aop:config>
+    </aop:config> -->
 	
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
