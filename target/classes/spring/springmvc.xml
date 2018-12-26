@@ -1,21 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+				        http://www.springframework.org/schema/mvc 
+				        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+				        http://www.springframework.org/schema/context 
+				        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+				        http://www.springframework.org/schema/aop
+				        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
 
 	<!-- 加载属性文件 -->
 	<context:property-placeholder location="classpath:resource/*.properties"/>
 	
 	<!-- 配置包扫描器，扫描@Controller注解的类 -->
 	<context:component-scan base-package="com.ryf"/>
+
+	
 	
 	<!-- 配置注解驱动 -->
 	<mvc:annotation-driven />
+	
+	
+	<bean id="controllerAop" class="com.ryf.aop.ControllerAop">
+	</bean>
+	
+	<!-- 
+		aop:aspectj-autoproxy 与  aop:config 2选1
+		前者是注解实现aop , 后者是xml方式实现aop
+	
+	 -->
+	<aop:aspectj-autoproxy/>
+ 	<aop:config>
+       <aop:aspect id="myAspect" ref="controllerAop">
+          <aop:pointcut  id="myPointCut"  expression="execution(* com.ryf.controller.*.*(..))" />
+          <!-- <aop:before pointcut-ref="myPointCut" method="before" /> -->
+          <aop:after-returning pointcut-ref="myPointCut"  method="afterReturning"/>
+          <!-- <aop:around pointcut-ref="myPointCut" method="around" /> -->
+       </aop:aspect>
+    </aop:config>
 	
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />
